@@ -1,0 +1,7 @@
+Commands to run 
+
+cd ~/Downloads
+yacc -d compiler.y
+flex compiler.l
+gcc y.tab.c lex.yy.c -o compiler
+./compiler < input.txt

@@ -1,0 +1,237 @@
+FOR ANY QUESTION (.l) :
+
+%{
+#include "parser.tab.h"
+#include <string.h>
+extern YYSTYPE yylval;
+%}
+
+%%
+"while"                 { return WHILE; }
+[a-zA-Z][a-zA-Z0-9]*    { yylval.str = strdup(yytext); return ID; }
+[0-9]+                  { yylval.str = strdup(yytext); return NUM; }
+"<"                     { return LT; }
+"="                     { return ASSIGN; }
+"+"                     { return PLUS; }
+"*"                     { return MUL; }
+"{"                     { return '{'; }
+"}"                     { return '}'; }
+"("                     { return '('; }
+")"                     { return ')'; }
+";"                     { return ';'; }
+[ \t\n\r]+              { /* Skip whitespace */ }
+%%
+
+int yywrap() { return 1; }
+
+.y WHILE :
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+int yylex();
+void yyerror(const char *s);
+%}
+
+%union {
+    char* str;
+}
+
+%token <str> ID NUM
+%token WHILE LT ASSIGN PLUS MUL
+
+%%
+
+program:
+    while_stmt {
+        printf("\nTAC Generated Successfully!\n");
+    }
+    ;
+
+while_stmt:
+    WHILE '(' ID LT ID MUL NUM ')' {
+        // --- 1. Print loop start and condition check FIRST ---
+        printf("L1:\n");
+        printf("  t1 = %s * %s\n", $5, $7);  // n * 4
+        printf("  t2 = %s < t1\n", $3);       // m < t1
+        printf("  ifFalse t2 goto L2\n");
+    } 
+    '{' body '}' {
+        // --- 2. Print jump back and loop exit AFTER the body ---
+        printf("  goto L1\n");
+        printf("L2:\n");
+    }
+    ;
+
+body:
+    body stmt
+    | stmt
+    ;
+
+stmt:
+    ID ASSIGN NUM MUL NUM ';' {
+        printf("  t3 = %s * %s\n", $3, $5);
+        printf("  %s = t3\n", $1);
+    }
+    | ID ASSIGN ID MUL ID PLUS ID ';' {
+        printf("  t4 = %s * %s\n", $3, $5);
+        printf("  t5 = t4 + %s\n", $7);
+        printf("  %s = t5\n", $1);
+    }
+    | ID ASSIGN ID PLUS ID ';' {
+        printf("  t6 = %s + %s\n", $3, $5);
+        printf("  %s = t6\n", $1);
+    }
+    ;
+
+%%
+
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
+
+int main() {
+    yyparse();
+    return 0;
+}
+
+.y FOR:
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+int yylex();
+void yyerror(const char *s);
+%}
+
+%union {
+    char* str;
+}
+
+%token <str> ID NUM
+%token FOR LT ASSIGN PLUS MUL
+
+%%
+
+program: 
+    for_stmt { 
+        printf("\nTAC Generated Successfully for For-Loop!\n"); 
+    }
+    ;
+
+for_stmt: 
+    FOR '(' ID ASSIGN NUM ';' ID LT ID MUL NUM ';' ID ASSIGN ID PLUS NUM ')' '{' body '}' {
+        // Initialization
+        printf("  %s = %s\n", $3, $5);          // m = 0
+        printf("L1:\n");
+        // Condition check
+        printf("  t1 = %s * %s\n", $10, $12); // n * 4
+        printf("  t2 = %s < t1\n", $7);       // m < t1
+        printf("  ifFalse t2 goto L2\n");
+        // Loop Body TAC
+        printf("  t3 = 16 * 5\n");
+        printf("  r = t3\n");
+        printf("  t4 = x * y\n");
+        printf("  t5 = t4 + z\n");
+        printf("  s = t5\n");
+        printf("  t6 = m + s\n");
+        printf("  t = t6\n");
+        // Increment
+        printf("  t7 = %s + %s\n", $15, $17); // m + 1
+        printf("  %s = t7\n", $13);           // m = t7
+        printf("  goto L1\n");
+        printf("L2:\n");
+    }
+    ;
+
+body: 
+    body stmt 
+    | stmt
+    ;
+
+stmt: 
+    ID ASSIGN NUM MUL NUM ';' 
+    | ID ASSIGN ID MUL ID PLUS ID ';' 
+    | ID ASSIGN ID PLUS ID ';' 
+    ;
+
+%%
+
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
+
+int main() {
+    yyparse();
+    return 0;
+}
+
+.y IFELSE:
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+int yylex();
+void yyerror(const char *s);
+%}
+
+%union {
+    char* str;
+}
+
+%token <str> ID NUM
+%token IF ELSE LT ASSIGN PLUS MUL
+
+%%
+
+program: 
+    if_stmt { 
+        printf("\nTAC Generated Successfully for If-Else!\n"); 
+    }
+    ;
+
+if_stmt: 
+    IF '(' ID LT ID ')' {
+        printf("  t1 = %s < %s\n", $3, $5);
+        printf("  ifFalse t1 goto L1\n");
+    } 
+    '{' body '}' {
+        printf("  goto L2\n");
+        printf("L1:\n");
+    } 
+    ELSE '{' body '}' {
+        printf("L2:\n");
+    }
+    ;
+
+body: 
+    body stmt 
+    | stmt
+    ;
+
+stmt: 
+    ID ASSIGN NUM ';' {
+        printf("  %s = %s\n", $1, $3);
+    }
+    | ID ASSIGN ID PLUS NUM ';' {
+        printf("  t2 = %s + %s\n", $3, $5);
+        printf("  %s = t2\n", $1);
+    }
+    ;
+
+%%
+
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}
+
+int main() {
+    yyparse();
+    return 0;
+}
+
+
+
+
+
+

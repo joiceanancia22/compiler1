@@ -1,0 +1,147 @@
+# Algorithm: Front End and Back End of a Compiler Using LEX and YACC
+
+## (a) Algorithm for LEX to identify tokens
+
+1. Start the program.
+2. Read the source program as input.
+3. Identify keywords such as `while`.
+4. Identify identifiers such as `m`, `n`, `r`, `s`, and `t`.
+5. Identify numerical constants such as `4`, `16`, and `5`.
+6. Identify operators such as `<`, `=`, `+`, and `*`.
+7. Identify special symbols such as parentheses, braces, and semicolons.
+8. Ignore whitespace and newline characters.
+9. Return the identified tokens to the YACC parser.
+10. Stop.
+
+## (b) Algorithm for YACC to check syntax
+
+1. Start the parser.
+2. Receive tokens from the LEX analyzer.
+3. Check whether the input follows the grammar rules.
+4. Check the syntax of the `while` statement, condition, and loop body.
+5. Check whether assignment statements contain identifiers, expressions, assignment operators, and semicolons in the correct order.
+6. If the input follows the grammar, display "Syntax is correct."
+7. Otherwise, display a syntax error.
+8. Stop.
+
+## (c) Algorithm for generating Three-Address Code using SDT
+
+1. Start the program.
+2. Parse the source code using YACC.
+3. Generate temporary variables for intermediate expression results.
+4. Translate multiplication and addition expressions into three-address instructions.
+5. Generate labels for the beginning and end of the loop.
+6. Generate conditional jump instructions for the `while` condition.
+7. Generate assignment instructions for `r`, `s`, and `t`.
+8. Generate a jump instruction to return to the loop condition.
+9. Display the generated three-address code.
+10. Stop.
+
+## (d) Algorithm for optimizing Three-Address Code using code motion
+
+1. Start the optimization process.
+2. Read the generated three-address code.
+3. Identify computations whose operands do not change inside the loop.
+4. Perform constant folding by evaluating constant expressions, such as `16 * 5 = 80`.
+5. Move loop-invariant computations outside the loop.
+6. Retain the assignments inside the loop to preserve the program's behavior.
+7. Generate and display the optimized three-address code.
+8. Stop.
+
+## (e) Algorithm for target code generation
+
+1. Start the code-generation process.
+2. Read the optimized three-address code.
+3. Allocate registers for intermediate results.
+4. Convert arithmetic operations into target instructions such as `MOV`, `MUL`, and `ADD`.
+5. Convert conditional statements into comparison and jump instructions.
+6. Generate labels and jump instructions for loop execution.
+7. Generate the final target code.
+8. Display the target instructions.
+9. Stop.
+
+## (f) Algorithm for integrating all modules
+
+1. Start the compiler.
+2. Read the source program as input.
+3. Pass the source program to LEX to identify tokens.
+4. Pass the tokens to YACC to validate the syntax.
+5. If a syntax error occurs, display the error and terminate.
+6. If the syntax is correct, generate three-address code using SDT.
+7. Optimize the generated code using constant folding and code motion.
+8. Convert the optimized code into target instructions.
+9. Display the generated, optimized, and target code.
+10. Test the integrated compiler with valid and invalid source programs.
+11. Stop.
+
+Result: The algorithms describe the six stages of the compiler practical, from lexical analysis and syntax checking to intermediate-code generation, optimization, target-code generation, and integration.
+
+
+
+
+### (a) LEX – Token Identification
+
+* Start and read the source program.
+
+* Identify keywords, identifiers, constants, operators, and symbols.
+
+* Ignore whitespace and return tokens to YACC.
+
+* Stop.
+
+### (b) YACC – Syntax Checking
+
+* Receive tokens from LEX.
+
+* Check the program against grammar rules.
+
+* Display syntax correctness or an error.
+
+* Stop.
+
+### (c) Three-Address Code Generation
+
+* Parse the source program using YACC.
+
+* Generate temporary variables and labels.
+
+* Convert expressions and loops into three-address code.
+
+* Display the generated code.
+
+### (d) Code Optimization
+
+* Read the three-address code.
+
+* Perform constant folding and identify loop-invariant expressions.
+
+* Move invariant computations outside the loop.
+
+* Display optimized code.
+
+### (e) Target Code Generation
+
+* Read the optimized code.
+
+* Convert operations into target instructions.
+
+* Allocate registers and generate jumps and labels.
+
+* Display the target code.
+
+### (f) Integration of All Modules
+
+* Read the source program.
+
+* Perform lexical analysis and syntax checking.
+
+* Generate and optimize three-address code.
+
+* Generate target code and display all outputs.
+
+* Test with valid and invalid programs.
+
+Result: The compiler performs lexical analysis, syntax checking, intermediate-code generation, optimization, target-code generation, and integration.
+
+
+
